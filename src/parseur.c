@@ -72,16 +72,36 @@ void		putintab(t_stuff *stuff)
 	ALIAS(stuff->map.array, array);
 	if (!array)
 		exit(0);
-	i = -1;
+	i = 0;
 	tmp = ft_strsplit(stuff->buf, '\n');
-	checkmap(tmp, stuff);
-	while (++i < stuff->map.maxy)
+	while (++i < stuff->map.maxy - 1)
 	{
-		j = -1;
-		tmp2 = ft_strsplit(tmp[i], ' ');
-		while (++j < stuff->map.maxx)
+		j = 0;
+		tmp2 = ft_strsplit(tmp[i - 1], ' ');
+		while (++j < stuff->map.maxx - 1)
 			array[i][j] = ft_atoi(tmp2[j]);
 		free_2d(tmp2);
 	}
 	free_2d(tmp);
+	setborders(stuff);
+}
+
+void		setborders(t_stuff *stuff)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = -1;
+	ALIAS(stuff->map.array, array);
+	while (++j < stuff->map.maxx)
+		array[0][j] = 1;
+	j = -1;
+	while (++j < stuff->map.maxx)
+		array[stuff->map.maxy - 1][j] = 1;
+	while (++i < stuff->map.maxy - 1)
+	{
+		array[i][0] = 1;
+		array[i][stuff->map.maxx - 1] = 1;
+	}
 }

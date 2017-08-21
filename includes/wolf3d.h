@@ -29,6 +29,32 @@
 # define MT 16
 # define ALIAS(var, name) typeof(var) name = var
 
+typedef struct		s_wolf
+{
+	double			wallh;
+	double			playerh;
+	double			fov;
+	double			angle;
+	double			posx;
+	double			posy;
+	double			dispw;
+	double			angleray;
+}					t_wolf;
+
+typedef struct		s_draw
+{
+	double			Xa;
+	double			Ya;
+	double			Xi;
+	double			Yi;
+	double			x;
+	double			y;
+	double			angle;
+	double			dist;
+	double			disthor;
+	double			distver;
+}					t_draw;
+
 typedef struct		s_map
 {
 	size_t			x;
@@ -55,6 +81,7 @@ typedef	struct		s_stuff
 {
 	t_img			img;
 	t_map			map;
+	t_wolf			wolf;
 	pthread_t		*th;
 	int				fd;
 	char			buf[BUFF_SIZE + 1];
@@ -74,5 +101,6 @@ size_t				lentab(char *buf);
 size_t				linelength(char *buf);
 void				putintab(t_stuff *stuff);
 void				init_struct(t_stuff *stuff);
+void				setborders(t_stuff *stuff);
 
 #endif

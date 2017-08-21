@@ -1,51 +1,93 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol.c                                          :+:      :+:    :+:   */
+/*   wolf3d.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgaillar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/19 22:17:03 by jgaillar          #+#    #+#             */
-/*   Updated: 2017/06/20 00:15:03 by jgaillar         ###   ########.fr       */
+/*   Created: 2017/08/21 13:09:10 by jgaillar          #+#    #+#             */
+/*   Updated: 2017/08/21 13:09:11 by jgaillar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void			ft_exit(int code)
+void	wolf3d(t_stuff *stuff)
 {
-	ft_putstr("Error happened: ");
-	ft_putnbr(code);
-	ft_putendl("\nExiting.");
-	exit(code);
+	t_tmp *tmp;
+
+	stuff->i = -1;
+	while (++stuff->i < MT)
+	{
+		tmp = malloc(sizeof(t_tmp));
+		tmp->start = stuff->i * WIDTH / MT;
+		tmp->end = tmp->start + WIDTH / MT;
+		tmp->stuff = stuff;
+		pthread_create(&stuff->th[stuff->i], NULL, \
+			(void*(*)(void *))(&draw_wolf), (void *)(tmp));
+	}
+	stuff->j = -1;
+	while (++stuff->j < MT)
+		pthread_join(stuff->th[stuff->j], NULL);
+	mlx_put_image_to_window(stuff->img.mlx_pr, stuff->img.win_ptr, \
+		stuff->img.img_ptr, 0, 0);
 }
 
-static void		ft_usage(void)
+void	draw_wolf(t_tmp *tmp)
 {
-	ft_putendl("Usage: ./wolf3d <map>");
-	ft_exit(0);
+	t_draw	draw;
+	double	disthor;
+	double	distver;
+
+	draw.angle = stuff->wolf.angle - 30;
+	while (++tmp->start < tmp->end)
+	{
+		check_hor(tmp, &draw);
+		draw.disthor = draw.dist;
+		check_ver(tmp, &draw);
+		draw.distver = draw.dist;
+		draw.dist = (draw.disthor > draw.distver ? draw.distver : draw.disthor);
+	}
 }
 
-int				main(int ac, char **av)
+void	check_hor(t_tmp *tmp, t_draw *draw)
 {
-	t_stuff stuff;
-	int i = -1;
-	int j = -1;;
+	draw->Ya = (draw->angle > 0 && draw->angle < 180 ? -64 : 64);
+	draw->Xa = stuff->wolf->wallh/tan(draw->angle);
+	draw->Yi = (draw->angle > 0 && draw->angle < 180 ? \
+		floor((stuff->wolf.posy/stuff->wolf.wallh) * (stuff->wolf.wallh) - 1) : \
+		floor((stuff->wokf.posy/stuff->wokf.wallh) * (stuff->wolf.wallh) + \
+		stuff->wolf.wallh));
+	draw->Xi = stuff->wolf.posx + (stuff->wolf.posy - draw->Yi)/tan(draw->angle);
+	draw->x = draw->Xi / stuff->wolf.wallh;
+	draw->y = draw->Yi / stuff->wolf.wallh;
+	while (stuff->map.array[draw->y][draw->x] == 0)
+	{
+		draw->Yi += draw.Ya;
+		draw->Xi += draw.Xa;
+		draw->x = floor(draw->Xi / stuff->wolf.wallh);
+		draw->y = floor(draw->Yi / stuff->wolf.wallh);
+	}
+	draw->dist = abs(stuff->wolf.posx - draw->Xi) / cos(draw->angle);
+}
 
-	if (ac != 2 || !av[1])
-		ft_usage();
-	if ((stuff.fd = open(av[1], O_RDONLY)) < 0)
-		ft_exit(-1);
-	stuff.buf[read(stuff.fd, stuff.buf, BUFF_SIZE)] = '\0';
-	close(stuff.fd);
-	init_struct(&stuff);
-	// stuff.img.mlx_ptr = mlx_init();
-	// stuff.img.win_ptr = mlx_new_window(stuff.img.mlx_ptr, WIDTH, LENGTH,\
-	// 		"WOLF3D");
-	//controlhelp();
-	// mlx_hook(stuff.img.win_ptr, 2, (1L << 0), hooks, &stuff);
-	// mlx_hook(stuff.img.win_ptr, 6, (1L << 6), mouse_hook, &stuff);
-	// mlx_hook(stuff.img.win_ptr, 4, (1L << 2), zoom, &stuff);
-	// mlx_loop(stuff.img.mlx_ptr);
-	return (0);
+void	check_ver(t_tmp *tmp, t_draw *draw)
+{
+	draw->Ya = stuff->wolf.wallh * tan(draw->angle);
+	draw->Xa = (draw->angle > 90 && dra->angle < 270 ? -64 : 64);
+	draw->Yi = stuff->wolf.posy + (stuff->wolf.posx - draw.Xa) * tan(draw.angle);
+	draw->Xi = (draw->angle > 90 && dra->angle < 270 ? \
+		floor(stuff->wolf.posx/stuff->wolf.wallh) * stuff->wolf.wallh - 1 :
+		floor(stuff->wolf.posx/stuff->wolf.wallh) * stuff->wolf.wallh \
+		+ stuff->wolf.wallh);
+	draw->x = draw->Xi / stuff->wolf.wallh;
+	draw->y = draw->Yi / stuff->wolf.wallh;
+	while (stuff->map.array[draw->y][draw->x] == 0)
+	{
+		draw->Yi += draw.Ya;
+		draw->Xi += draw.Xa;
+		draw->x = floor(draw->Xi / stuff->wolf.wallh);
+		draw->y = floor(draw->Yi / stuff->wolf.wallh);
+	}
+	draw->dist = abs(stuff->wolf.posx - draw->Xi) / cos(draw->angle);
 }

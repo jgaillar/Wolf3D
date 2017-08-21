@@ -12,7 +12,7 @@
 
 SRC_PATH = src/
 
-SRC_NAME = wolf3d.c struct.c parseur.c malloc.c
+SRC_NAME = main.c struct.c parseur.c malloc.c wolf3d.c
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
 
