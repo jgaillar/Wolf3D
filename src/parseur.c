@@ -98,10 +98,10 @@ void		setborders(t_stuff *stuff)
 		array[0][j] = 1;
 	j = -1;
 	while (++j < stuff->map.maxx)
-		array[stuff->map.maxy - 1][j] = 1;
+		array[stuff->map.maxy - 1][j] = 0;
 	while (++i < stuff->map.maxy - 1)
 	{
-		array[i][0] = 1;
-		array[i][stuff->map.maxx - 1] = 1;
+		array[i][0] = 0;
+		array[i][stuff->map.maxx - 1] = 0;
 	}
 }

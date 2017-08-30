@@ -13,8 +13,8 @@
 #ifndef WOLF3D_H
 
 # define WOLF3D_H
-# define WIDTH 800
-# define LENGTH 800
+# define WIDTH 320
+# define LENGTH 200
 # define BUFF_SIZE 0xfffff
 # include <fcntl.h>
 # include <sys/types.h>
@@ -26,33 +26,33 @@
 # include <math.h>
 # include <../libft/libft.h>
 
-# define MT 16
+# define MT 1
 # define ALIAS(var, name) typeof(var) name = var
 
 typedef struct		s_wolf
 {
-	double			wallh;
-	double			playerh;
-	double			fov;
-	double			angle;
-	double			posx;
-	double			posy;
-	double			dispw;
-	double			angleray;
+	float			wallh;
+	float			playerh;
+	float			fov;
+	float			angle;
+	float			posx;
+	float			posy;
+	float			dispw;
+	float			angleray;
 }					t_wolf;
 
 typedef struct		s_draw
 {
-	double			Xa;
-	double			Ya;
-	double			Xi;
-	double			Yi;
-	double			x;
-	double			y;
-	double			angle;
-	double			dist;
-	double			disthor;
-	double			distver;
+	float			Xa;
+	float			Ya;
+	float			Xi;
+	float			Yi;
+	int			x;
+	int			y;
+	float			angle;
+	float			dist;
+	float			disthor;
+	float			distver;
 }					t_draw;
 
 typedef struct		s_map
@@ -90,8 +90,8 @@ typedef	struct		s_stuff
 typedef	struct		s_tmp
 {
 	t_stuff			*stuff;
-	double			start;
-	double			end;
+	int			start;
+	int			end;
 }					t_tmp;
 
 void				ft_exit(int code);
@@ -101,6 +101,15 @@ size_t				lentab(char *buf);
 size_t				linelength(char *buf);
 void				putintab(t_stuff *stuff);
 void				init_struct(t_stuff *stuff);
+void				init_wolf(t_stuff *stuff);
 void				setborders(t_stuff *stuff);
+void				wolf3d(t_stuff *stuff);
+void				draw_wolf(t_tmp tmp, t_img *img);
+int				check_hor(t_wolf wolf, t_draw *draw, t_map map);
+int				check_ver(t_wolf wolf, t_draw *draw, t_map map);
+void				correc_dist(t_draw *draw, t_stuff *stuff);
+void				create_image(t_stuff *stuff);
+void				mlx_pixel_put_to_image(t_img img, int x, int y, int color);
+void				aff(t_draw *draw, t_stuff *stuff, t_img *img, int x);
 
 #endif

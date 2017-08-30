@@ -36,6 +36,9 @@ int				main(int ac, char **av)
 		ft_usage();
 	if ((stuff.fd = open(av[1], O_RDONLY)) < 0)
 		ft_exit(-1);
+	stuff.img.mlx_ptr = mlx_init();
+	stuff.img.win_ptr = mlx_new_window(stuff.img.mlx_ptr, WIDTH, LENGTH,\
+			"WOLF3D");
 	stuff.buf[read(stuff.fd, stuff.buf, BUFF_SIZE)] = '\0';
 	close(stuff.fd);
 	init_struct(&stuff);
@@ -49,13 +52,11 @@ int				main(int ac, char **av)
 		}
 		ft_putchar('\n');
 	}
-	// stuff.img.mlx_ptr = mlx_init();
-	// stuff.img.win_ptr = mlx_new_window(stuff.img.mlx_ptr, WIDTH, LENGTH,\
-	// 		"WOLF3D");
 	// controlhelp();
 	// mlx_hook(stuff.img.win_ptr, 2, (1L << 0), hooks, &stuff);
 	// mlx_hook(stuff.img.win_ptr, 6, (1L << 6), mouse_hook, &stuff);
 	// mlx_hook(stuff.img.win_ptr, 4, (1L << 2), zoom, &stuff);
 	// mlx_loop(stuff.img.mlx_ptr);
+	mlx_loop(stuff.img.mlx_ptr);
 	return (0);
 }
