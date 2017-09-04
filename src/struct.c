@@ -19,7 +19,13 @@ void	init_struct(t_stuff *stuff)
 	stuff->map.maxx = linelength(stuff->buf) + 2;
 	stuff->map.maxy = lentab(stuff->buf) + 2;
 	stuff->map.array = malloc2d(&stuff->map);
-	init_wolf(stuff);
+	stuff->wolf.posX = 2;
+	stuff->wolf.posY = 2;
+	stuff->wolf.dirX = -1;
+	stuff->wolf.dirY= 0;
+	stuff->wolf.planeX = 0;
+	stuff->wolf.planeY = 0.66;
+	stuff->wolf.hit = 0;
 	putintab(stuff);
 	create_image(stuff);
 	wolf3d(stuff);
@@ -33,16 +39,4 @@ void	create_image(t_stuff *stuff)
 		exit(0);
 	stuff->img.data = mlx_get_data_addr(stuff->img.img_ptr,\
 		&stuff->img.bits_per_pixel, &stuff->img.size_line, &stuff->img.endian);
-}
-
-void	init_wolf(t_stuff *stuff)
-{
-	stuff->wolf.wallh = 64;
-	stuff->wolf.playerh = stuff->wolf.wallh/2;
-	stuff->wolf.posx = 96;
-	stuff->wolf.posy = 224;
-	stuff->wolf.fov = 60;
-	stuff->wolf.angle = 90;
-	stuff->wolf.dispw = ((WIDTH/2)/tan(stuff->wolf.fov/2));
-	stuff->wolf.angleray = stuff->wolf.fov/WIDTH;
 }

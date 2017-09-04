@@ -31,28 +31,37 @@
 
 typedef struct		s_wolf
 {
-	float			wallh;
-	float			playerh;
-	float			fov;
-	float			angle;
-	float			posx;
-	float			posy;
-	float			dispw;
-	float			angleray;
+	float			posX;
+	float			posY;
+	float			dirX;
+	float			dirY;
+	float			planeX;
+	float			planeY;
+	float			time;
+	float			oldtime;
+	float			cameraX;
+	float			rayPosX;
+	float			rayPosY;
+	float			rayDirX;
+	float			rayDirY;
+	int				mapX;
+	int				mapY;
+	float			sideDistX;
+	float			sideDistY;
+	float			deltaDistX;
+	float			deltaDistY;
+	int				stepX;
+	int				stepY;
+	int				hit;
+	int				side;
 }					t_wolf;
 
 typedef struct		s_draw
 {
-	float			Xa;
-	float			Ya;
-	float			Xi;
-	float			Yi;
-	int			x;
-	int			y;
-	float			angle;
-	float			dist;
-	float			disthor;
-	float			distver;
+	float			perpWallDist;
+	int				lineHeight;
+	int				start;
+	int				end;
 }					t_draw;
 
 typedef struct		s_map
@@ -82,6 +91,7 @@ typedef	struct		s_stuff
 	t_img			img;
 	t_map			map;
 	t_wolf			wolf;
+	t_draw			draw;
 	pthread_t		*th;
 	int				fd;
 	char			buf[BUFF_SIZE + 1];
@@ -104,12 +114,12 @@ void				init_struct(t_stuff *stuff);
 void				init_wolf(t_stuff *stuff);
 void				setborders(t_stuff *stuff);
 void				wolf3d(t_stuff *stuff);
-void				draw_wolf(t_tmp tmp, t_img *img);
-int				check_hor(t_wolf wolf, t_draw *draw, t_map map);
-int				check_ver(t_wolf wolf, t_draw *draw, t_map map);
-void				correc_dist(t_draw *draw, t_stuff *stuff);
+void				draw_wolf(t_stuff *stuff);
+void				setdir(t_stuff *stuff);
+void				dda(t_stuff *stuff);
+void				distance_calcultor(t_stuff *stuff);
+void				aff(t_stuff *stuff);
 void				create_image(t_stuff *stuff);
 void				mlx_pixel_put_to_image(t_img img, int x, int y, int color);
-void				aff(t_draw *draw, t_stuff *stuff, t_img *img, int x);
 
 #endif

@@ -15,135 +15,111 @@
 
 void	wolf3d(t_stuff *stuff)
 {
-	t_tmp *tmp;
-	int i;
-	int j;
-
-	i = -1;
-	while (++i < MT)
-	{
-		tmp = malloc(sizeof(t_tmp));
-		tmp->start = i * WIDTH / MT;
-		tmp->end = tmp->start + WIDTH / MT;
-		tmp->stuff = stuff;
-		// pthread_create(&stuff->th[i], NULL, \
-		// 	(void*(*)(void *))(&draw_wolf), (void *)(tmp));
-		draw_wolf(*tmp, &stuff->img);
-	}
-	j = -1;
-	// while (++j < MT)
-	// 	pthread_join(stuff->th[j], NULL);
+	draw_wolf(stuff);
 	mlx_put_image_to_window(stuff->img.mlx_ptr, stuff->img.win_ptr, \
 		stuff->img.img_ptr, 0, 0);
 }
 
-void	draw_wolf(t_tmp tmp, t_img *img)
+void	draw_wolf(t_stuff *stuff)
 {
-	t_draw	draw;
-	t_stuff *stuff;
-
-	stuff = tmp.stuff;
-//	printf("%f\n", stuff->wolf.angle);
-	draw.angle = 90;
-	check_hor(stuff->wolf, &draw, stuff->map);
-	// while (tmp.start < tmp.end)
-	// {
-	// 	if (check_hor(stuff->wolf, &draw, stuff->map) == 1)
-	// 	{
-	// 		draw.disthor = draw.dist;
-	// 		check_ver(stuff->wolf, &draw, stuff->map);
-	// 		draw.distver = draw.dist;
-	// 		draw.dist = (draw.disthor < draw.distver ? draw.disthor : draw.distver);
-	// 	//printf("disthor : [%f]\n", draw.dist);
-	// 		correc_dist(&draw, stuff);
-	// 		aff(&draw, stuff, img, tmp.start);
-	// 	}
-	// 	draw.angle -= stuff->wolf.angleray;
-	// 	tmp.start++;
-	// }
+	stuff->map.x = -1;
+	while (++stuff->map.x < WIDTH)
+	{
+		stuff->wolf.cameraX = 2 * stuff->map.x / WIDTH - 1;
+		stuff->wolf.rayPosX = stuff->wolf.posX;
+		stuff->wolf.rayPosY = stuff->wolf.posY;
+		stuff->wolf.rayDirX = stuff->wolf.dirX + stuff->wolf.planeX * \
+			stuff->wolf.cameraX;
+		stuff->wolf.rayDirY = stuff->wolf.dirY + stuff->wolf.planeY * \
+			stuff->wolf.cameraX;
+		stuff->wolf.mapX = stuff->wolf.rayPosX;
+		stuff->wolf.mapY = stuff->wolf.rayPosY;
+		stuff->wolf.deltaDistX = sqrt(1 + (stuff->wolf.rayDirY * \
+			stuff->wolf.rayDirY) / (stuff->wolf.rayDirX * stuff->wolf.rayDirX));
+		stuff->wolf.deltaDistX = sqrt(1 + (stuff->wolf.rayDirX * \
+			stuff->wolf.rayDirX) / (stuff->wolf.rayDirY * stuff->wolf.rayDirY));
+		setdir(stuff);
+		dda(stuff);
+		distance_calcultor(stuff);
+		aff(stuff);
+	}
 }
 
-int	check_hor(t_wolf wolf, t_draw *draw, t_map map)
+void	setdir(t_stuff *stuff)
 {
-	draw->Yi = (draw->angle > 0 && draw->angle <= 180 ? \
-		floor(wolf.posy/64) * 64 - 1: floor(wolf.posy/64) * 64 + 64);
-	draw->Xi = floor(wolf.posx + (wolf.posy - draw->Yi) / tan(draw->angle));
-	draw->x = floor(draw->Xi / 64);
-	draw->y = floor(draw->Yi / 64);
-	draw->Ya = (draw->angle > 0 && draw->angle <= 180 ? 64 : -64);
-	draw->Xa = 	(draw->angle > 90 && draw->angle <=360 ? \
-		floor((draw->Ya / fabs(tan(90 - draw->angle)))) : \
-		floor(draw->Ya / tan(draw->angle)));
-	if (draw->angle == 90)
-		draw->Xa = 0;
-	printf("Xi : [%f]\nYi : [%f]\nx : [%i]\ny : [%i]\nXa : [%f]\nYa : [%f]\n\n", draw->Xi, draw->Yi, draw->x, draw->y, draw->Xa, draw->Ya);
-	while (draw->y >= 0 && draw->y < map.maxy && draw->x >= 0 && draw->x < map.maxx)
-	{
-		if (map.array[draw->y][draw->x] == 1)
+		if (stuff->wolf.rayDirX < 0)
 		{
-			ft_putendl("wall");
-			draw->dist = fabs(wolf.posx - draw->Xi) / cos(draw->angle);
-			return (1);
+			stuff->wolf.stepX = -1;
+			stuff->wolf.sideDistX = (stuff->wolf.rayPosX - stuff->wolf.mapX) *\
+				stuff->wolf.deltaDistX;
 		}
 		else
 		{
-			draw->Xi += draw->Xa;
-			draw->Yi -= draw->Ya;
-			draw->x = floor(draw->Xi / 64);
-			draw->y = floor(draw->Yi / 64);
+			stuff->wolf.stepX = 1;
+			stuff->wolf.sideDistX = (stuff->wolf.mapX + 1 - stuff->wolf.rayPosX)
+				* stuff->wolf.deltaDistX;
 		}
-		printf("Xi : [%f]\nYi : [%f]\nx : [%i]\ny : [%i]\nXa : [%f]\nYa : [%f]\n\n", draw->Xi, draw->Yi, draw->x, draw->y, draw->Xa, draw->Ya);
-	}
-	return (0);
-}
-
-int	check_ver(t_wolf wolf, t_draw *draw, t_map map)
-{
-	draw->Xi = (draw->angle > 90 && draw->angle <= 270 ? \
-		floor(wolf.posx/64) * 64 - 1: floor(wolf.posx/64) * 64 + 64);
-	draw->Yi = floor(wolf.posy + (wolf.posx - draw->Xi) * tan(draw->angle));
-	draw->Xa = (draw->angle > 90 && draw->angle <= 270 ? -64 : 64);
-	draw->Ya = floor(64 * tan(draw->angle));
-	draw->x = floor(draw->Xi / 64);
-	draw->y = floor(draw->Yi / 64);
-	while (draw->y >= 0 && draw->y < map.maxy && draw->x >= 0 && draw->x < map.maxx)
-	{
-		printf("Yi : [%f]\nXi : [%f]\ny : [%i]\nx : [%i]\nYa : [%f]\nXa : [%f]\n\n", draw->Yi, draw->Xi, draw->y, draw->x, draw->Ya, draw->Xa);
-		if (map.array[draw->y][draw->x] == 1)
+		if (stuff->wolf.rayDirY < 0)
 		{
-			ft_putendl("wall");
-			draw->dist = fabs(wolf.posx - draw->Xi) / cos(draw->angle);
-			return (1);
+			stuff->wolf.stepY = -1;
+			stuff->wolf.sideDistY = (stuff->wolf.rayPosY - stuff->wolf.mapY) * \
+				stuff->wolf.deltaDistY;
 		}
 		else
 		{
-			draw->Xi += draw->Xa;
-			draw->Yi -= draw->Ya;
-			draw->x = floor(draw->Xi / 64);
-			draw->y = floor(draw->Yi / 64);
+			stuff->wolf.stepY = 1;
+			stuff->wolf.sideDistY = (stuff->wolf.mapY + 1 - stuff->wolf.rayPosY)
+				* stuff->wolf.deltaDistY;
 		}
+}
+
+void	dda(t_stuff *stuff)
+{
+	while (stuff->wolf.hit == 0)
+	{
+		if (stuff->wolf.sideDistX < stuff->wolf.sideDistY)
+		{
+			stuff->wolf.sideDistX += stuff->wolf.deltaDistX;
+			stuff->wolf.mapX += stuff->wolf.stepX;
+			stuff->wolf.side = 0;
+		}
+		else
+		{
+			stuff->wolf.sideDistY += stuff->wolf.deltaDistY;
+			stuff->wolf.mapY += stuff->wolf.stepY;
+			stuff->wolf.side = 1;
+		}
+		if (stuff->map.array[stuff->wolf.mapY][stuff->wolf.mapY] > 0)
+			stuff->wolf.hit = 1;
 	}
-	return (0);
 }
 
-void	correc_dist(t_draw *draw, t_stuff *stuff)
+void	distance_calcultor(t_stuff *stuff)
 {
-	double	angle;
-
-	angle = ((stuff->wolf.angle - draw->angle) * -1);
-	draw->dist = draw->dist * acos(cos(angle));
+	if (stuff->wolf.side == 0)
+		stuff->draw.perpWallDist = (stuff->wolf.mapX - stuff->wolf.rayPosX\
+			+ (1 - stuff->wolf.stepX) / 2) / stuff->wolf.rayDirX;
+	else
+		stuff->draw.perpWallDist = (stuff->wolf.mapY - stuff->wolf.rayPosY\
+			+ (1 - stuff->wolf.stepY) / 2) / stuff->wolf.rayDirY;
+	stuff->draw.lineHeight = LENGTH / stuff->draw.perpWallDist;
+	stuff->draw.start = -stuff->draw.lineHeight / 2 + LENGTH / 2;
+	if (stuff->draw.start < 0)
+		stuff->draw.start = 0;
+	stuff->draw.end = stuff->draw.lineHeight / 2 + LENGTH / 2;
+	if (stuff->draw.end >= LENGTH)
+		stuff->draw.end = LENGTH - 1;
 }
 
-void	aff(t_draw *draw, t_stuff *stuff, t_img *img, int x)
+void	aff(t_stuff *stuff)
 {
-	double	height;
-	int		tmp;
 	int i;
+	int j;
 
-	height = floor((64/draw->dist * stuff->wolf.dispw));
-	tmp = (WIDTH / 2) - (height / 2);
-	i = tmp;
-	mlx_pixel_put_to_image(*img, x, 0, 0xFFFFFF - (0.1 * i));
-	while (i++ < tmp + height)
-		mlx_pixel_put_to_image(*img, x, i, 0xFFFFFF - (0.1 * i));
+	i = -1;
+	j = stuff->draw.start - 1;
+	while (++i < stuff->draw.start)
+		mlx_pixel_put_to_image(stuff->img, stuff->map.x, i, 0x00FFFF);
+	while (++j < stuff->draw.end)
+		mlx_pixel_put_to_image(stuff->img, stuff->map.x, j, 0xFF0000);
 }
