@@ -19,16 +19,16 @@ void	init_struct(t_stuff *stuff)
 	stuff->map.maxx = linelength(stuff->buf) + 2;
 	stuff->map.maxy = lentab(stuff->buf) + 2;
 	stuff->map.array = malloc2d(&stuff->map);
-	stuff->wolf.posX = 2;
-	stuff->wolf.posY = 2;
+	stuff->wolf.posX = 6.5;
+	stuff->wolf.posY = 6.5;
 	stuff->wolf.dirX = -1;
 	stuff->wolf.dirY= 0;
 	stuff->wolf.planeX = 0;
 	stuff->wolf.planeY = 0.66;
 	stuff->wolf.hit = 0;
+	stuff->map.x = -1;
 	putintab(stuff);
 	create_image(stuff);
-	wolf3d(stuff);
 }
 
 void	create_image(t_stuff *stuff)

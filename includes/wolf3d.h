@@ -13,8 +13,8 @@
 #ifndef WOLF3D_H
 
 # define WOLF3D_H
-# define WIDTH 320
-# define LENGTH 200
+# define WIDTH 1920
+# define LENGTH 1080
 # define BUFF_SIZE 0xfffff
 # include <fcntl.h>
 # include <sys/types.h>
@@ -24,6 +24,7 @@
 # include <mlx.h>
 # include <pthread.h>
 # include <math.h>
+# include <time.h>
 # include <../libft/libft.h>
 
 # define MT 1
@@ -39,6 +40,7 @@ typedef struct		s_wolf
 	float			planeY;
 	float			time;
 	float			oldtime;
+	float			frameTime;
 	float			cameraX;
 	float			rayPosX;
 	float			rayPosY;
@@ -100,8 +102,8 @@ typedef	struct		s_stuff
 typedef	struct		s_tmp
 {
 	t_stuff			*stuff;
-	int			start;
-	int			end;
+	int				start;
+	int				end;
 }					t_tmp;
 
 void				ft_exit(int code);
@@ -121,5 +123,8 @@ void				distance_calcultor(t_stuff *stuff);
 void				aff(t_stuff *stuff);
 void				create_image(t_stuff *stuff);
 void				mlx_pixel_put_to_image(t_img img, int x, int y, int color);
+int					hooks(int keycode, t_stuff *stuff);
+void				echap(int keycode, t_stuff *stuff);
+void				cleanexit(t_stuff *stuff);
 
 #endif
