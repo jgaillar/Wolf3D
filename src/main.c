@@ -43,21 +43,9 @@ int				main(int ac, char **av)
 	close(stuff.fd);
 	init_struct(&stuff);
 	wolf3d(&stuff);
-	while (++i < stuff.map.maxy)
-	{
-		j = -1;
-		while (++j < stuff.map.maxx)
-		{
-			ft_putnbr(stuff.map.array[i][j]);
-			ft_putchar(' ');
-		}
-		ft_putchar('\n');
-	}
-	// controlhelp();
 	mlx_hook(stuff.img.win_ptr, 2, (1L << 0), hooks, &stuff);
 	mlx_hook(stuff.img.win_ptr, 17, (1L << 17), (int(*)())cleanexit, &stuff);
-	// mlx_hook(stuff.img.win_ptr, 6, (1L << 6), mouse_hook, &stuff);
-	//mlx_hook(stuff.img.win_ptr, 4, (1L << 2), zoom, &stuff);
+	mlx_loop_hook(stuff.img.mlx_ptr, (int(*)())wolf3d, &stuff);
 	mlx_loop(stuff.img.mlx_ptr);
 	return (0);
 }

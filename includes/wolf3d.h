@@ -13,8 +13,8 @@
 #ifndef WOLF3D_H
 
 # define WOLF3D_H
-# define WIDTH 1920
-# define LENGTH 1080
+# define WIDTH 1280
+# define LENGTH 720
 # define BUFF_SIZE 0xfffff
 # include <fcntl.h>
 # include <sys/types.h>
@@ -24,7 +24,8 @@
 # include <mlx.h>
 # include <pthread.h>
 # include <math.h>
-# include <time.h>
+# include <sys/time.h>
+# include <stdio.h>
 # include <../libft/libft.h>
 
 # define MT 1
@@ -56,6 +57,8 @@ typedef struct		s_wolf
 	int				stepY;
 	int				hit;
 	int				side;
+	float			moveSpeed;
+	float			rotSpeed;
 }					t_wolf;
 
 typedef struct		s_draw
@@ -122,9 +125,11 @@ void				dda(t_stuff *stuff);
 void				distance_calcultor(t_stuff *stuff);
 void				aff(t_stuff *stuff);
 void				create_image(t_stuff *stuff);
-void				mlx_pixel_put_to_image(t_img img, int x, int y, int color);
+void				mlx_pixel_put_to_image(t_img *img, int x, int y, int color);
 int					hooks(int keycode, t_stuff *stuff);
 void				echap(int keycode, t_stuff *stuff);
+void				movement(int keycode, t_stuff *stuff);
+static void				rotation(int keycode, t_stuff *stuff);
 void				cleanexit(t_stuff *stuff);
 
 #endif

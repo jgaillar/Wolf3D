@@ -11,21 +11,33 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-#include <stdio.h>
 
 void	wolf3d(t_stuff *stuff)
 {
-		draw_wolf(stuff);
-	// 	stuff->wolf.oldtime = stuff->wolf.time;
-	// //	stuff->wolf.time = getTicks();
-	// 	stuff->wolf.frameTime = (stuff->wolf.time - stuff->wolf.oldtime) / 1000;
-		mlx_put_image_to_window(stuff->img.mlx_ptr, stuff->img.win_ptr, \
-			stuff->img.img_ptr, 0, 0);
-		mlx_string_put(stuff->img.mlx_ptr, stuff->img.win_ptr, WIDTH/100,LENGTH/100, 0xFFFFFF, "17");
+	struct timeval tp;
+	char *tmp;
+	stuff->wolf.oldtime = stuff->wolf.time;
+	gettimeofday(&tp, NULL);
+	stuff->wolf.time = tp.tv_usec;
+//	printf("dirX : [%f] dirY  [%f]\n", stuff->wolf.dirX, stuff->wolf.dirY);
+	draw_wolf(stuff);
+	gettimeofday(&tp, NULL);
+	stuff->wolf.time = tp.tv_usec;
+	stuff->wolf.frameTime = floor((stuff->wolf.time - stuff->wolf.oldtime) / 1000);
+	tmp = ft_itoa((int)stuff->wolf.frameTime);
+	mlx_put_image_to_window(stuff->img.mlx_ptr, stuff->img.win_ptr, \
+		stuff->img.img_ptr, 0, 0);
+	mlx_string_put(stuff->img.mlx_ptr, stuff->img.win_ptr, \
+		WIDTH/100,LENGTH/100, 0xFFFFFF, tmp);
+	free(tmp);
+	stuff->wolf.moveSpeed = stuff->wolf.frameTime * 0.003;
+	stuff->wolf.rotSpeed = stuff->wolf.frameTime * 0.003;
 }
 
 void	draw_wolf(t_stuff *stuff)
 {
+	//printf("dirX : [%f] dirY  [%f]\n", stuff->wolf.dirX, stuff->wolf.dirY);
+	stuff->map.x = -1;
 	while (++stuff->map.x < WIDTH)
 	{
 		stuff->wolf.cameraX = 2 * stuff->map.x / (float)WIDTH - 1;
@@ -123,17 +135,21 @@ void	aff(t_stuff *stuff)
 	i = -1;
 	j = stuff->draw.start - 1;
 	while (++i < stuff->draw.start)
-		mlx_pixel_put_to_image(stuff->img, stuff->map.x, i, 0x4D0099);
+		mlx_pixel_put_to_image(&stuff->img, stuff->map.x, i, 0x547681);
 	while (++j < stuff->draw.end)
 	{
-		if (stuff->wolf.side == 0)
-			mlx_pixel_put_to_image(stuff->img, stuff->map.x, j, 0x990033);
-		else
-			mlx_pixel_put_to_image(stuff->img, stuff->map.x, j, 0x990033 / 2);
+		if (stuff->wolf.side == 0 && stuff->wolf.stepX == 1)
+			mlx_pixel_put_to_image(&stuff->img, stuff->map.x, j, 0x8B008B);
+		else if (stuff->wolf.side == 0 && stuff->wolf.stepX == -1)
+			mlx_pixel_put_to_image(&stuff->img, stuff->map.x, j, 0x800080);
+		else if (stuff->wolf.side == 1 && stuff->wolf.stepY == 1)
+			mlx_pixel_put_to_image(&stuff->img, stuff->map.x, j, 0x9932CC);
+		else if (stuff->wolf.side == 1 && stuff->wolf.stepY == -1)
+			mlx_pixel_put_to_image(&stuff->img, stuff->map.x, j, 0x8A2BE2);
 	}
 	while (j < LENGTH)
 	{
-		mlx_pixel_put_to_image(stuff->img, stuff->map.x, j, 0x696969);
+		mlx_pixel_put_to_image(&stuff->img, stuff->map.x, j, 0x3D5256);
 		j++;
 	}
 }
