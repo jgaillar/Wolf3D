@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-void			mlx_pixel_put_to_image(t_img *img, int x, int y, int color)
+void			mlx_pixel_put_to_image(t_img img, int x, int y, int color)
 {
 	int			color1;
 	int			color2;
@@ -20,17 +20,17 @@ void			mlx_pixel_put_to_image(t_img *img, int x, int y, int color)
 	int			bit_pix;
 	float		img_size;
 
-	img_size = WIDTH * LENGTH * img->bits_per_pixel / 8;
-	if (x < 0 || y < 0 || y * img->size_line + x * img->bits_per_pixel / 8 > \
+	img_size = WIDTH * LENGTH * img.bits_per_pixel / 8;
+	if (x < 0 || y < 0 || y * img.size_line + x * img.bits_per_pixel / 8 > \
 		img_size
-		|| x >= img->size_line / (img->bits_per_pixel / 8) || y >= img_size / \
-		img->size_line)
+		|| x >= img.size_line / (img.bits_per_pixel / 8) || y >= img_size / \
+		img.size_line)
 		return ;
 	color1 = color;
 	color2 = color >> 8;
 	color3 = color >> 16;
-	bit_pix = img->bits_per_pixel / 8;
-	img->data[y * img->size_line + x * bit_pix] = color1;
-	img->data[y * img->size_line + x * bit_pix + 1] = color2;
-	img->data[y * img->size_line + x * bit_pix + 2] = color3;
+	bit_pix = img.bits_per_pixel / 8;
+	img.data[y * img.size_line + x * bit_pix] = color1;
+	img.data[y * img.size_line + x * bit_pix + 1] = color2;
+	img.data[y * img.size_line + x * bit_pix + 2] = color3;
 }

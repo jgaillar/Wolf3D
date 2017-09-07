@@ -14,15 +14,13 @@
 
 void	init_struct(t_stuff *stuff)
 {
-	if (!(stuff->th = (pthread_t *)malloc(sizeof(pthread_t) * MT)))
-		exit(0);
 	stuff->map.maxx = linelength(stuff->buf) + 2;
 	stuff->map.maxy = lentab(stuff->buf) + 2;
 	stuff->map.array = malloc2d(&stuff->map);
 	stuff->wolf.posX = 6.5;
 	stuff->wolf.posY = 6.5;
 	stuff->wolf.dirX = -1;
-	stuff->wolf.dirY= 0;
+	stuff->wolf.dirY = 0;
 	stuff->wolf.planeX = 0;
 	stuff->wolf.planeY = 0.66;
 	stuff->wolf.hit = 0;

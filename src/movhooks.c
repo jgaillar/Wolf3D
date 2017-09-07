@@ -12,68 +12,65 @@
 
 #include "wolf3d.h"
 
-int		hooks(int keycode, t_stuff *stuff)
-{
-	echap(keycode, stuff);
-	movement(keycode, stuff);
-	rotation(keycode, stuff);
-	return (0);
-}
-
-void	echap(int keycode, t_stuff *stuff)
-{
-	if (keycode == 53)
-		exit(0);
-}
-
-void	cleanexit(t_stuff *stuff)
-{
-	free(stuff->map.array);
-	exit(0);
-}
-
 void	movement(int keycode, t_stuff *stuff)
 {
-	if (keycode == 126)
+	if (keycode == 13)
 	{
-		printf("posX : [%f]\n", (stuff->wolf.posX + stuff->wolf.dirX * stuff->wolf.moveSpeed));
-		if (stuff->map.array[(int)(stuff->wolf.posX + stuff->wolf.dirX * stuff->wolf.moveSpeed)][(int)stuff->wolf.posY] == 0)
+		if (stuff->map.array[(int)(stuff->wolf.posX + stuff->wolf.dirX * \
+			stuff->wolf.moveSpeed)][(int)stuff->wolf.posY] == 0)
 			stuff->wolf.posX += stuff->wolf.dirX * stuff->wolf.moveSpeed;
-		if (stuff->map.array[(int)stuff->wolf.posX][(int)(stuff->wolf.posY + stuff->wolf.dirY * stuff->wolf.moveSpeed)] == 0)
+		if (stuff->map.array[(int)stuff->wolf.posX][(int)(stuff->wolf.posY + \
+			stuff->wolf.dirY * stuff->wolf.moveSpeed)] == 0)
 			stuff->wolf.posY += stuff->wolf.dirY * stuff->wolf.moveSpeed;
 	}
-	if (keycode == 125)
+	if (keycode == 1)
 	{
-		printf("posX : [%f]\n", (stuff->wolf.posX - stuff->wolf.dirX * stuff->wolf.moveSpeed));
-		if (stuff->map.array[(int)(stuff->wolf.posX - stuff->wolf.dirX * stuff->wolf.moveSpeed)][(int)stuff->wolf.posY] == 0)
+		if (stuff->map.array[(int)(stuff->wolf.posX - stuff->wolf.dirX * \
+			stuff->wolf.moveSpeed)][(int)stuff->wolf.posY] == 0)
 			stuff->wolf.posX -= stuff->wolf.dirX * stuff->wolf.moveSpeed;
-		if (stuff->map.array[(int)stuff->wolf.posX][(int)(stuff->wolf.posY - stuff->wolf.dirY * stuff->wolf.moveSpeed)] == 0)
+		if (stuff->map.array[(int)stuff->wolf.posX][(int)(stuff->wolf.posY - \
+			stuff->wolf.dirY * stuff->wolf.moveSpeed)] == 0)
 			stuff->wolf.posY -= stuff->wolf.dirY * stuff->wolf.moveSpeed;
 	}
 }
 
-static void	rotation(int keycode, t_stuff *stuff)
+void	right(int keycode, t_stuff *stuff)
 {
 	double oldDirX;
 	double oldPlaneX;
 
-	if (keycode == 124)
+	if (keycode == 2)
 	{
 		oldDirX = stuff->wolf.dirX;
-		stuff->wolf.dirX = stuff->wolf.dirX * cos(-stuff->wolf.rotSpeed) - stuff->wolf.dirY * sin(-stuff->wolf.rotSpeed);
-		stuff->wolf.dirY = oldDirX * sin(-stuff->wolf.rotSpeed) + stuff->wolf.dirY * cos(-stuff->wolf.rotSpeed);
+		stuff->wolf.dirX = stuff->wolf.dirX * cos(-stuff->wolf.rotSpeed) - \
+		stuff->wolf.dirY * sin(-stuff->wolf.rotSpeed);
+		stuff->wolf.dirY = oldDirX * sin(-stuff->wolf.rotSpeed) + \
+		stuff->wolf.dirY * cos(-stuff->wolf.rotSpeed);
 		oldPlaneX = stuff->wolf.planeX;
-		stuff->wolf.planeX = stuff->wolf.planeX * cos(-stuff->wolf.rotSpeed) - stuff->wolf.planeY * sin(-stuff->wolf.rotSpeed);
-		stuff->wolf.planeY = oldPlaneX * sin(-stuff->wolf.rotSpeed) + stuff->wolf.planeY * cos(-stuff->wolf.rotSpeed);
+		stuff->wolf.planeX = stuff->wolf.planeX * cos(-stuff->wolf.rotSpeed) - \
+		stuff->wolf.planeY * sin(-stuff->wolf.rotSpeed);
+		stuff->wolf.planeY = oldPlaneX * sin(-stuff->wolf.rotSpeed) + \
+		stuff->wolf.planeY * cos(-stuff->wolf.rotSpeed);
 	}
-	if (keycode == 123)
+}
+
+void				left(int keycode, t_stuff *stuff)
+{
+	double oldDirX;
+	double oldPlaneX;
+
+	if (keycode == 0)
 	{
 		oldDirX = stuff->wolf.dirX;
-		stuff->wolf.dirX = stuff->wolf.dirX * cos(stuff->wolf.rotSpeed) - stuff->wolf.dirY * sin(stuff->wolf.rotSpeed);
-		stuff->wolf.dirY = oldDirX * sin(stuff->wolf.rotSpeed) + stuff->wolf.dirY * cos(stuff->wolf.rotSpeed);
+		stuff->wolf.dirX = stuff->wolf.dirX * cos(stuff->wolf.rotSpeed) - \
+		stuff->wolf.dirY * sin(stuff->wolf.rotSpeed);
+		stuff->wolf.dirY = oldDirX * sin(stuff->wolf.rotSpeed) + \
+		stuff->wolf.dirY * cos(stuff->wolf.rotSpeed);
 		printf("dirX : [%f] dirY  [%f]\n", stuff->wolf.dirX, stuff->wolf.dirY);
 		oldPlaneX = stuff->wolf.planeX;
-		stuff->wolf.planeX = stuff->wolf.planeX * cos(stuff->wolf.rotSpeed) - stuff->wolf.planeY * sin(stuff->wolf.rotSpeed);
-		stuff->wolf.planeY = oldPlaneX * sin(stuff->wolf.rotSpeed) + stuff->wolf.planeY * cos(stuff->wolf.rotSpeed);
+		stuff->wolf.planeX = stuff->wolf.planeX * cos(stuff->wolf.rotSpeed) - \
+		stuff->wolf.planeY * sin(stuff->wolf.rotSpeed);
+		stuff->wolf.planeY = oldPlaneX * sin(stuff->wolf.rotSpeed) + \
+		stuff->wolf.planeY * cos(stuff->wolf.rotSpeed);
 	}
 }
