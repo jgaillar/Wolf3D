@@ -34,3 +34,28 @@ void			mlx_pixel_put_to_image(t_img img, int x, int y, int color)
 	img.data[y * img.size_line + x * bit_pix + 1] = color2;
 	img.data[y * img.size_line + x * bit_pix + 2] = color3;
 }
+
+void			aff(t_stuff *e)
+{
+	int i;
+	int j;
+
+	i = -1;
+	j = e->draw.start - 1;
+	while (++i < e->draw.start)
+		mlx_pixel_put_to_image(e->img, e->map.x, i, 0x547681);
+	while (++j < e->draw.end)
+	{
+		if (e->wolf.side == 0 && e->wolf.stepx == 1)
+			mlx_pixel_put_to_image(e->img, e->map.x, j, 0x5b2C6f);
+		else if (e->wolf.side == 0 && e->wolf.stepx == -1)
+			mlx_pixel_put_to_image(e->img, e->map.x, j, 0x6c3483);
+		else if (e->wolf.side == 1 && e->wolf.stepy == 1)
+			mlx_pixel_put_to_image(e->img, e->map.x, j, 0x512e5f);
+		else if (e->wolf.side == 1 && e->wolf.stepy == -1)
+			mlx_pixel_put_to_image(e->img, e->map.x, j, 0x8e44ad);
+	}
+	j = e->draw.end - 1;
+	while (++j < LENGTH)
+		mlx_pixel_put_to_image(e->img, e->map.x, j, 0x34495e);
+}

@@ -32,38 +32,38 @@
 
 typedef struct		s_wolf
 {
-	float			posX;
-	float			posY;
-	float			dirX;
-	float			dirY;
-	float			planeX;
-	float			planeY;
+	float			posx;
+	float			posy;
+	float			dirx;
+	float			diry;
+	float			planex;
+	float			planey;
 	float			time;
 	float			oldtime;
-	float			frameTime;
-	float			cameraX;
-	float			rayPosX;
-	float			rayPosY;
-	float			rayDirX;
-	float			rayDirY;
-	int				mapX;
-	int				mapY;
-	float			sideDistX;
-	float			sideDistY;
-	float			deltaDistX;
-	float			deltaDistY;
-	int				stepX;
-	int				stepY;
+	float			frametime;
+	float			camerax;
+	float			rayposx;
+	float			rayposy;
+	float			raydirx;
+	float			raydiry;
+	int				mapx;
+	int				mapy;
+	float			sidedistx;
+	float			sidedisty;
+	float			deltadistx;
+	float			deltadisty;
+	int				stepx;
+	int				stepy;
 	int				hit;
 	int				side;
-	float			moveSpeed;
-	float			rotSpeed;
+	float			movespeed;
+	float			rotspeed;
 }					t_wolf;
 
 typedef struct		s_draw
 {
-	float			perpWallDist;
-	int				lineHeight;
+	float			perpwalldist;
+	int				lineheight;
 	int				start;
 	int				end;
 }					t_draw;
@@ -86,7 +86,6 @@ typedef struct		s_img
 	int				size_line;
 	int				endian;
 	int				size;
-	int				color[51];
 	char			*data;
 }					t_img;
 
@@ -102,34 +101,38 @@ typedef	struct		s_stuff
 
 typedef	struct		s_tmp
 {
-	t_stuff			*stuff;
+	t_stuff			*e;
 	int				start;
 	int				end;
 }					t_tmp;
 
-void				ft_exit(int code);
+void				ft_stuffxit(int code);
 int					**malloc2d(t_map *map);
 void				free_2d(char **array);
 size_t				lentab(char *buf);
 size_t				linelength(char *buf);
-void				putintab(t_stuff *stuff);
-void				init_struct(t_stuff *stuff);
-void				init_wolf(t_stuff *stuff);
-void				setborders(t_stuff *stuff);
-void				wolf3d(t_stuff *stuff);
-void				draw_wolf(t_stuff *stuff);
-void				setdir(t_stuff *stuff);
-void				dda(t_stuff *stuff);
-void				distance_calcultor(t_stuff *stuff);
-void				aff(t_stuff *stuff);
-void				create_image(t_stuff *stuff);
+void				putintab(t_stuff *e);
+void				init_struct(t_stuff *e);
+void				init_wolf(t_stuff *e);
+void				setborders(t_stuff *e);
+void				wolf3d(t_stuff *e);
+void				draw_wolf(t_stuff *e);
+void				setdir(t_stuff *e);
+void				dda(t_stuff *e);
+void				distance_calcultor(t_stuff *e);
+void				aff(t_stuff *e);
+void				create_image(t_stuff *e);
 void				mlx_pixel_put_to_image(t_img img, int x, int y, int color);
-int					hooks(int keycode, t_stuff *stuff);
-void				echap(int keycode, t_stuff *stuff);
-void				movement(int keycode, t_stuff *stuff);
-void				right(int keycode, t_stuff *stuff);
-void				left(int keycode, t_stuff *stuff);
-void				cleanexit(t_stuff *stuff);
-void				fps_counter(t_stuff *stuff);
+int					hooks(int keycode, t_stuff *e);
+void				echap(int keycode, t_stuff *e);
+void				movement(int keycode, t_stuff *e);
+void				right(int keycode, t_stuff *e);
+void				left(int keycode, t_stuff *e);
+void				cleanexit(t_stuff *e);
+void				fps_counter(t_stuff *e);
+int					check(t_stuff *e);
+int					checkbuf(char *buf);
+void				ft_exit(int code);
+size_t					searchbigline(char *buf);
 
 #endif

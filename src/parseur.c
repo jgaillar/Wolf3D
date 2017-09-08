@@ -12,36 +12,36 @@
 
 #include "wolf3d.h"
 
-static void		checkmap(char **str, t_stuff *stuff)
+size_t		searchbigline(char *buf)
 {
-	int i;
-	int j;
-
-	i = -1;
-	while (++i < stuff->map.maxy)
-	{
-		j = -1;
-		while (++j < stuff->map.maxx)
-		{
-			if ((str[i][j] > '9' || str[i][j] < '0') && str[i][j] != ' ')
-				ft_exit(-1);
-		}
-	}
-}
-
-size_t			linelength(char *buf)
-{
-	int i;
-	size_t len;
+	int		i;
+	int		len;
+	int		big;
+	int		check;
 
 	i = -1;
 	len = 0;
-	while (buf[++i] != '\n')
+	big = 0;
+	check = 0;
+	while (buf[++i])
 	{
-		if (buf[i] != ' ')
+		if (buf[i] != ' ' && buf[i] != '\n')
+		{
 			len++;
+			while (buf[i] != ' ' && buf[i] != '\n')
+				i++;
+		}
+		if (buf[i] == '\n')
+		{
+			check++;
+			if ((big < len || big > len) && check > 1)
+				ft_exit(-1);
+			else
+				big = len;
+			len = 0;
+		}
 	}
-	return (len);
+	return (big >= len ? big : len);
 }
 
 size_t			lentab(char *buf)
@@ -62,46 +62,47 @@ size_t			lentab(char *buf)
 	return (len);
 }
 
-void		putintab(t_stuff *stuff)
+void			putintab(t_stuff *e)
 {
 	int		i;
 	int		j;
 	char	**tmp;
 	char	**tmp2;
 
-	ALIAS(stuff->map.array, array);
+	ALIAS(e->map.array, array);
 	if (!array)
 		exit(0);
 	i = 0;
-	tmp = ft_strsplit(stuff->buf, '\n');
-	while (++i < stuff->map.maxy - 1)
+	tmp = ft_strsplit(e->buf, '\n');
+	while (++i < e->map.maxy - 1)
 	{
 		j = 0;
 		tmp2 = ft_strsplit(tmp[i - 1], ' ');
-		while (++j < stuff->map.maxx - 1)
-			array[i][j] = ft_atoi(tmp2[j]);
+
+		while (++j < e->map.maxx - 1)
+			array[i][j] = ft_atoi(tmp2[j - 1]);
 		free_2d(tmp2);
 	}
 	free_2d(tmp);
-	setborders(stuff);
+	setborders(e);
 }
 
-void		setborders(t_stuff *stuff)
+void			setborders(t_stuff *e)
 {
 	int i;
 	int j;
 
 	i = 0;
 	j = -1;
-	ALIAS(stuff->map.array, array);
-	while (++j < stuff->map.maxx)
+	ALIAS(e->map.array, array);
+	while (++j < e->map.maxx)
 		array[0][j] = 1;
 	j = -1;
-	while (++j < stuff->map.maxx)
-		array[stuff->map.maxy - 1][j] = 1;
-	while (++i < stuff->map.maxy - 1)
+	while (++j < e->map.maxx)
+		array[e->map.maxy - 1][j] = 1;
+	while (++i < e->map.maxy - 1)
 	{
 		array[i][0] = 1;
-		array[i][stuff->map.maxx - 1] = 1;
+		array[i][e->map.maxx - 1] = 1;
 	}
 }

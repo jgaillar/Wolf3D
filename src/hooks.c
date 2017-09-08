@@ -12,23 +12,23 @@
 
 #include "wolf3d.h"
 
-int		hooks(int keycode, t_stuff *stuff)
+int		hooks(int keycode, t_stuff *e)
 {
-	echap(keycode, stuff);
-	movement(keycode, stuff);
-	right(keycode, stuff);
-	left(keycode, stuff);
+	echap(keycode, e);
+	movement(keycode, e);
+	right(keycode, e);
+	left(keycode, e);
 	return (0);
 }
 
-void	echap(int keycode, t_stuff *stuff)
+void	echap(int keycode, t_stuff *e)
 {
 	if (keycode == 53)
 		exit(0);
 }
 
-void	cleanexit(t_stuff *stuff)
+void	cleanexit(t_stuff *e)
 {
-	free(stuff->map.array);
+	free(e->map.array);
 	exit(0);
 }
