@@ -24,11 +24,16 @@ int		hooks(int keycode, t_stuff *e)
 void	echap(int keycode, t_stuff *e)
 {
 	if (keycode == 53)
+    {
+		mlx_destroy_image(e->img.mlx_ptr, e->img.win_ptr);
+		ft_strdel(&e->img.data);
 		exit(0);
+    }
 }
 
 void	cleanexit(t_stuff *e)
 {
-	free(e->map.array);
+	mlx_destroy_image(e->img.mlx_ptr, e->img.win_ptr);
+	ft_strdel(&e->img.data);
 	exit(0);
 }

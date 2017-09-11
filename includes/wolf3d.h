@@ -112,8 +112,9 @@ typedef	struct		s_tmp
 
 void				ft_stuffxit(int code);
 int					**malloc2d(t_map *map);
-void				free_2d(char **array);
-size_t				lentab(char *buf);
+void				free_2d(int **array, t_stuff *e);
+void				free_2dc(char **array);
+size_t				lentab(t_stuff *e);
 size_t				linelength(char *buf);
 void				putintab(t_stuff *e);
 void				init_struct(t_stuff *e);
@@ -137,6 +138,6 @@ void				fps_counter(t_stuff *e);
 int					check(t_stuff *e);
 int					checkbuf(char *buf);
 void				ft_exit(int code);
-size_t				searchbigline(t_stuff *e, char *buf);
+size_t				searchbigline(t_stuff *e);
 
 #endif

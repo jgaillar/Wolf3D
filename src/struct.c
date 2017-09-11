@@ -14,8 +14,8 @@
 
 void	init_struct(t_stuff *e)
 {
-	e->map.maxx = searchbigline(e, e->buf) + 2;
-	e->map.maxy = lentab(e->buf) + 2;
+	e->map.maxx = searchbigline(e) + 2;
+	e->map.maxy = lentab(e) + 2;
 	e->map.array = malloc2d(&e->map);
 	e->wolf.dirx = -1;
 	e->wolf.diry = 0;

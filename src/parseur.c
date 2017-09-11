@@ -12,21 +12,21 @@
 
 #include "wolf3d.h"
 
-size_t			searchbigline(t_stuff *e, char *buf)
+size_t			searchbigline(t_stuff *e)
 {
 	e->i = -1;
 	e->len = 0;
 	e->big = 0;
 	e->check = 0;
-	while (buf[++e->i])
+	while (e->buf[++e->i])
 	{
-		if (buf[e->i] != ' ' && buf[e->i] != '\n')
+		if (e->buf[e->i] != ' ' && e->buf[e->i] != '\n')
 		{
 			e->len++;
-			while (buf[e->i] != ' ' && buf[e->i] != '\n')
+			while (e->buf[e->i] != ' ' && e->buf[e->i] != '\n')
 				++e->i;
 		}
-		if (buf[e->i] == '\n')
+		if (e->buf[e->i] == '\n')
 		{
 			e->check++;
 			if ((e->big < e->len || e->big > e->len) && e->check > 1)
@@ -38,19 +38,19 @@ size_t			searchbigline(t_stuff *e, char *buf)
 	return (e->big >= e->len ? e->big : e->len);
 }
 
-size_t			lentab(char *buf)
+size_t			lentab(t_stuff *e)
 {
 	int		i;
 	size_t	len;
 
 	i = -1;
 	len = 0;
-	while (buf[++i])
+	while (e->buf[++i])
 	{
-		if (buf[i] == '\n')
+		if (e->buf[i] == '\n')
 			len++;
 	}
-	if (buf[i] == '\0' && buf[i - 1] != '\n')
+	if (e->buf[i] == '\0' && e->buf[i - 1] != '\n')
 		len++;
 	return (len);
 }
@@ -73,9 +73,9 @@ void			putintab(t_stuff *e)
 		tmp2 = ft_strsplit(tmp[i - 1], ' ');
 		while (++j < e->map.maxx - 1)
 			array[i][j] = ft_atoi(tmp2[j - 1]);
-		free_2d(tmp2);
+		free_2dc(tmp2);
 	}
-	free_2d(tmp);
+	free_2dc(tmp);
 	setborders(e);
 }
 

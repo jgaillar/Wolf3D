@@ -26,13 +26,24 @@ int		**malloc2d(t_map *map)
 	return (array);
 }
 
-void	free_2d(char **array)
+void	free_2d(int **array, t_stuff *e)
+{
+	int	i;
+
+	i = -1;
+	while (++i < e->map.maxy)
+	   free(&array[i]);
+	free(array);
+	array = NULL;
+}
+
+void	free_2dc(char **array)
 {
 	int	i;
 
 	i = -1;
 	while (array[++i])
-		ft_strdel(&array[i]);
+	   ft_strdel(&array[i]);
 	free(array);
 	array = NULL;
 }
