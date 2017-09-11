@@ -25,7 +25,7 @@ int				checkbuf(char *buf)
 	i = -1;
 	while (buf[++i] != '\0')
 		if (buf[i] == 48)
-			return(1);
+			return (1);
 	return (0);
 }
 
@@ -46,8 +46,6 @@ static void		ft_usage(void)
 int				main(int ac, char **av)
 {
 	t_stuff e;
-	int i = -1;
-	int j;
 
 	if (ac != 2 || !av[1])
 		ft_usage();
@@ -61,16 +59,6 @@ int				main(int ac, char **av)
 	if (checkbuf(e.buf) == 0)
 		ft_exit(-1);
 	init_struct(&e);
-	while (++i < e.map.maxy)
-	{
-		j = -1;
-		while (++j < e.map.maxx)
-		{
-			ft_putnbr(e.map.array[i][j]);
-			ft_putchar(' ');
-		}
-		ft_putchar('\n');
-	}
 	wolf3d(&e);
 	mlx_hook(e.img.win_ptr, 2, (1L << 0), hooks, &e);
 	mlx_hook(e.img.win_ptr, 17, (1L << 17), (int(*)())cleanexit, &e);

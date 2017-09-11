@@ -97,6 +97,10 @@ typedef	struct		s_stuff
 	t_draw			draw;
 	int				fd;
 	char			buf[BUFF_SIZE + 1];
+	int				i;
+	int				len;
+	int				big;
+	int				check;
 }					t_stuff;
 
 typedef	struct		s_tmp
@@ -133,6 +137,6 @@ void				fps_counter(t_stuff *e);
 int					check(t_stuff *e);
 int					checkbuf(char *buf);
 void				ft_exit(int code);
-size_t					searchbigline(char *buf);
+size_t				searchbigline(t_stuff *e, char *buf);
 
 #endif
