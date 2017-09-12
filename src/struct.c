@@ -31,9 +31,9 @@ void	init_struct(t_stuff *e)
 void	create_image(t_stuff *e)
 {
 	e->img.img_ptr = mlx_new_image(e->img.mlx_ptr, WIDTH, LENGTH);
-	if (!(e->img.data = (char *)ft_strnew(sizeof(char)\
-		* WIDTH * LENGTH * 4)))
-		exit(0);
+	if (!(e->img.data = (char *)malloc(sizeof(char)\
+		* WIDTH * LENGTH * 4 + 1)))
+		ft_exit(-1, e);
 	e->img.data = mlx_get_data_addr(e->img.img_ptr,\
 		&e->img.bits_per_pixel, &e->img.size_line, &e->img.endian);
 }

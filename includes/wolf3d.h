@@ -136,8 +136,8 @@ void				left(int keycode, t_stuff *e);
 void				cleanexit(t_stuff *e);
 void				fps_counter(t_stuff *e);
 int					check(t_stuff *e);
-int					checkbuf(char *buf);
-void				ft_exit(int code);
+int					checkbuf(char *buf, t_stuff *e);
+void				ft_exit(int code, t_stuff *e);
 size_t				searchbigline(t_stuff *e);
 
 #endif

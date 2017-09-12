@@ -30,7 +30,7 @@ size_t			searchbigline(t_stuff *e)
 		{
 			e->check++;
 			if ((e->big < e->len || e->big > e->len) && e->check > 1)
-				ft_exit(-1);
+				ft_exit(-1, e);
 			e->big = e->len;
 			e->len = 0;
 		}

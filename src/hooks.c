@@ -23,17 +23,29 @@ int		hooks(int keycode, t_stuff *e)
 
 void	echap(int keycode, t_stuff *e)
 {
+	int i;
+
+	i = -1;
 	if (keycode == 53)
     {
+		while (++i < e->map.maxy)
+			free(e->map.array[i]);
+		free(e->map.array);
+		free(e->img.data);
 		mlx_destroy_image(e->img.mlx_ptr, e->img.win_ptr);
-		ft_strdel(&e->img.data);
 		exit(0);
     }
 }
 
 void	cleanexit(t_stuff *e)
 {
+	int i;
+
+	i = -1;
+	while (++i < e->map.maxy)
+		free(e->map.array[i]);
+	free(e->map.array);
+	free(e->img.data);
 	mlx_destroy_image(e->img.mlx_ptr, e->img.win_ptr);
-	ft_strdel(&e->img.data);
 	exit(0);
 }

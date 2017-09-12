@@ -18,21 +18,16 @@ int		**malloc2d(t_map *map)
 	int		i;
 
 	i = -1;
-	if (!(array = (int **)ft_memalloc(sizeof(int *) * (map->maxy))))
+	if (!(array = (int **)malloc(sizeof(int *) * (map->maxy))))
 		exit(0);
 	while (++i < map->maxy)
-		if (!(array[i] = (int *)ft_memalloc(sizeof(int) * (map->maxx))))
+		if (!(array[i] = (int *)malloc(sizeof(int) * (map->maxx))))
 			exit(0);
 	return (array);
 }
 
 void	free_2d(int **array, t_stuff *e)
 {
-	int	i;
-
-	i = -1;
-	while (++i < e->map.maxy)
-	   free(&array[i]);
 	free(array);
 	array = NULL;
 }
